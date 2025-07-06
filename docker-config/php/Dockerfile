@@ -2,7 +2,7 @@
 FROM php:8.2-fpm
 
 # ワーキングディレクトリを設定
-WORKDIR /var/www/html
+WORKDIR /var/www
 
 # 必要なライブラリとPHP拡張機能をインストール
 # - git, curl, zip: 一般的な開発ツール

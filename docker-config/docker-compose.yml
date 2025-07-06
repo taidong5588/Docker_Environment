@@ -20,8 +20,8 @@ services:
     # ボリューム（ディレクトリ/ファイル）のマウント
     volumes:
       # アプリケーションのソースコードをマウント
-      # ホストの'../my-app'をコンテナの'/var/www/html'に同期
-      - ../my-app:/var/www/html
+      # ホストの'../my-app'をコンテナの'/var/www'に同期
+      - ../my-app:/var/www
       # Nginxの設定ファイルをマウント
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       # ログファイルの出力先をマウント
@@ -41,7 +41,7 @@ services:
       context: ./php
     container_name: ${COMPOSE_PROJECT_NAME}-php
     volumes:
-      - ../my-app:/var/www/html
+      - ../my-app:/var/www
       # PHPのカスタム設定ファイルをマウント
       - ./php/php.ini:/usr/local/etc/php/conf.d/custom.ini
       # PHPのエラーログファイルをマウント
