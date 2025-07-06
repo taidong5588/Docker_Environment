@@ -11,6 +11,7 @@ services:
     # このdocker-compose.ymlからの相対パスで'./nginx'ディレクトリを指定
     build:
       context: ./docker-config/nginx
+      dockerfile: Dockerfile
     # コンテナ名を.envファイルの値を使って定義
     container_name: ${COMPOSE_PROJECT_NAME}-nginx
     # ホストマシンとコンテナのポートをマッピング
@@ -23,9 +24,9 @@ services:
       # ホストの'../my-app'をコンテナの'/var/www'に同期
       - ./my-app:/var/www
       # Nginxの設定ファイルをマウント
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker-config/nginx/default.conf:/etc/nginx/conf.d/default.conf
       # ログファイルの出力先をマウント
-      - ./errors:/var/log/nginx
+      - ./docker-config/errors:/var/log/nginx/errors
     # 依存関係を定義 (phpサービスが起動してからnginxを起動)
     depends_on:
       - php
@@ -39,13 +40,14 @@ services:
   php:
     build:
       context: ./docker-config/php
+      dockerfile: Dockerfile
     container_name: ${COMPOSE_PROJECT_NAME}-php
     volumes:
       - ./my-app:/var/www
       # PHPのカスタム設定ファイルをマウント
-      - ./php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./docker-config/php/php.ini:/usr/local/etc/php/php.ini
       # PHPのエラーログファイルをマウント
-      - ./errors/php_errors.log:/var/log/php_errors.log
+      - ./docker-config/errors:/var/log/php-fpm/errors
     # 環境変数をコンテナ内に設定 (DB接続情報)
     environment:
       DB_HOST: db
@@ -83,10 +85,10 @@ services:
       # データベースのデータを永続化するための名前付きボリューム
       - db-data:/var/lib/mysql
       # MariaDBのカスタム設定ファイルをマウント
-      - ./db/my.conf:/etc/mysql/conf.d/my.conf
+      - ./docker-config/db/my.conf:/etc/mysql/conf.d/my.cnf
     ports:
       # ホストから直接DBに接続したい場合はコメントを外す (例: 3306:3306)
-      # - "3306:3306"
+      - "3306:3306"
     networks:
       - app-network
 
