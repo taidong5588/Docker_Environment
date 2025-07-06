@@ -1,21 +1,75 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Docker PHP Environment</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #3a3a3a; background-color: #f8f9fa; margin: 0; padding: 2rem; }
-        .container { max-width: 800px; margin: 2rem auto; padding: 2rem; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1, h2 { color: #2c3e50; border-bottom: 2px solid #e9ecef; padding-bottom: 10px; }
-        h1 { font-size: 2.5rem; }
-        .status { padding: 1rem; border-radius: 5px; font-weight: bold; margin-top: 1rem; border: 1px solid transparent; }
-        .status.success { background-color: #e6ffed; color: #2f6f44; border-color: #b8e9c5; }
-        .status.error { background-color: #fff0f1; color: #a82a38; border-color: #f5c6cb; }
-        pre { background-color: #e9ecef; padding: 1rem; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; color: #495057; }
-        code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: #3a3a3a;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        .status {
+            padding: 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 1rem;
+            border: 1px solid transparent;
+        }
+
+        .status.success {
+            background-color: #e6ffed;
+            color: #2f6f44;
+            border-color: #b8e9c5;
+        }
+
+        .status.error {
+            background-color: #fff0f1;
+            color: #a82a38;
+            border-color: #f5c6cb;
+        }
+
+        pre {
+            background-color: #e9ecef;
+            padding: 1rem;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #495057;
+        }
+
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>🚀 Docker for PHP Developers</h1>
@@ -50,4 +104,5 @@
         ?>
     </div>
 </body>
+
 </html>
