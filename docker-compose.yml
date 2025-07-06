@@ -10,7 +10,7 @@ services:
     # ビルドに使用するDockerfileの場所を指定
     # このdocker-compose.ymlからの相対パスで'./nginx'ディレクトリを指定
     build:
-      context: ./nginx
+      context: ./docker-config/nginx
     # コンテナ名を.envファイルの値を使って定義
     container_name: ${COMPOSE_PROJECT_NAME}-nginx
     # ホストマシンとコンテナのポートをマッピング
@@ -38,7 +38,7 @@ services:
   #--------------------------------------------------------------------------
   php:
     build:
-      context: ./php
+      context: ./docker-config/php
     container_name: ${COMPOSE_PROJECT_NAME}-php
     volumes:
       - ../my-app:/var/www
@@ -64,7 +64,7 @@ services:
   #--------------------------------------------------------------------------
   db:
     build:
-      context: ./db
+      context: ./docker-config/db
       # .envファイルからMariaDBのバージョンを渡す
       args:
         MARIADB_VERSION: ${MARIADB_VERSION}

@@ -17,13 +17,13 @@
 
 ## 📂 ディレクトリ構成
 
-.
+/
+├── .env                         # Docker環境変数の設定ファイル
+├── docker-compose.yml           # サービス全体の構成管理ファイル
 ├── docker-config/               # コンテナ関連の設定をまとめるディレクトリ
 │   ├── db/                      # MariaDB コンテナ用設定
 │   │   ├── Dockerfile           # MariaDB イメージをカスタマイズ（オプション）
 │   │   └── my.conf              # MariaDB のカスタム設定
-│   ├── docker-compose.yml       # サービス全体の構成管理ファイル
-│   ├── .env                     # Docker環境変数の設定ファイル
 │   ├── .gitignore
 │   ├── errors
 │   │   └── php_errors.log
