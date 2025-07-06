@@ -1,12 +1,13 @@
-# Use official PHP image as a base
+# 公式のPHP-FPMイメージをベースとして使用 (バージョン8.2)
 FROM php:8.2-fpm
 
-# Set working directory
+# ワーキングディレクトリを設定
 WORKDIR /var/www/html
 
-# Install necessary dependencies and PHP extensions
-# - libzip-dev, zip: for zip extension
-# - mysqli: for MariaDB/MySQL connection
+# 必要なライブラリとPHP拡張機能をインストール
+# - git, curl, zip: 一般的な開発ツール
+# - pdo_mysql, mysqli: MariaDB/MySQL接続用
+# - zip: Composerなどで必要
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -17,17 +18,17 @@ RUN apt-get update && apt-get install -y \
     mysqli \
     zip
 
-# Install Composer (PHP package manager)
+# Composer (PHPパッケージマネージャ) をグローバルにインストール
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Create a dedicated user to run PHP-FPM
-# This is a good practice for security
+# セキュリティ向上のため、専用ユーザー(www)でPHP-FPMを実行
+# www-dataではなく、ホストのユーザーID(1000)に合わせることが多い
 RUN groupadd -g 1000 www && \
     useradd -u 1000 -ms /bin/sh -g www www
 
-# Switch to the new user
+# ユーザーを切り替え
 USER www
 
-# Expose port 9000 and start php-fpm server
+# ポート9000を公開し、php-fpmサーバーを起動
 EXPOSE 9000
 CMD ["php-fpm"]

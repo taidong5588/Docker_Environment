@@ -1,40 +1,53 @@
-# Docker Compose file format version
+# Docker Compose ファイルのバージョンを指定
 version: '3.8'
 
+# サービス（コンテナ）の定義
 services:
-  # Nginx Web Server
+  #--------------------------------------------------------------------------
+  # Nginx (Webサーバー)
+  #--------------------------------------------------------------------------
   nginx:
+    # ビルドに使用するDockerfileの場所を指定
+    # このdocker-compose.ymlからの相対パスで'./nginx'ディレクトリを指定
     build:
-      context: ./docker-config/nginx  # ← この行を追加
+      context: ./nginx
+    # コンテナ名を.envファイルの値を使って定義
     container_name: ${COMPOSE_PROJECT_NAME}-nginx
+    # ホストマシンとコンテナのポートをマッピング
+    # ホストの${NGINX_PORT}番ポートをコンテナの80番ポートに接続
     ports:
       - "${NGINX_PORT}:80"
+    # ボリューム（ディレクトリ/ファイル）のマウント
     volumes:
-      # アプリケーションのソースコード
-      - ./my-app:/var/www/html
-      # Nginx設定ファイル
-      - ./docker-config/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      # エラーログ
-      - ./docker-config/errors:/var/log/nginx
+      # アプリケーションのソースコードをマウント
+      # ホストの'../my-app'をコンテナの'/var/www/html'に同期
+      - ../my-app:/var/www/html
+      # Nginxの設定ファイルをマウント
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      # ログファイルの出力先をマウント
+      - ./errors:/var/log/nginx
+    # 依存関係を定義 (phpサービスが起動してからnginxを起動)
     depends_on:
       - php
+    # 接続するネットワークを指定
     networks:
       - app-network
 
-  # PHP-FPM Service
+  #--------------------------------------------------------------------------
+  # PHP-FPM
+  #--------------------------------------------------------------------------
   php:
     build:
-      context: ./docker-config/php
+      context: ./php
     container_name: ${COMPOSE_PROJECT_NAME}-php
     volumes:
-      # アプリケーションのソースコード
-      - ./my-app:/var/www/html
-      # PHP設定ファイル
-      - ./docker-config/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
-      # PHPエラーログ
-      - ./docker-config/errors/php_errors.log:/var/log/php_errors.log
+      - ../my-app:/var/www/html
+      # PHPのカスタム設定ファイルをマウント
+      - ./php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      # PHPのエラーログファイルをマウント
+      - ./errors/php_errors.log:/var/log/php_errors.log
+    # 環境変数をコンテナ内に設定 (DB接続情報)
     environment:
-      # データベース接続情報
       DB_HOST: db
       DB_PORT: 3306
       DB_DATABASE: ${MARIADB_DATABASE}
@@ -45,35 +58,48 @@ services:
     networks:
       - app-network
 
-  # MariaDB Database Service
+  #--------------------------------------------------------------------------
+  # MariaDB (データベース)
+  #--------------------------------------------------------------------------
   db:
-    image: mariadb:${MARIADB_VERSION}
+    build:
+      context: ./db
+      # .envファイルからMariaDBのバージョンを渡す
+      args:
+        MARIADB_VERSION: ${MARIADB_VERSION}
     container_name: ${COMPOSE_PROJECT_NAME}-db
+    # コンテナが停止した場合、常に再起動する
     restart: always
+    # コンテナの標準入出力をコンテナのttyにアタッチ
     tty: true
+    # データベースの初期設定を行うための環境変数
     environment:
       MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MARIADB_DATABASE}
       MYSQL_USER: ${MARIADB_USER}
       MYSQL_PASSWORD: ${MARIADB_PASSWORD}
     volumes:
-      # データベースの永続化
+      # データベースのデータを永続化するための名前付きボリューム
       - db-data:/var/lib/mysql
-      # MariaDB設定ファイル
-      - ./docker-config/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      # MariaDBのカスタム設定ファイルをマウント
+      - ./db/my.conf:/etc/mysql/conf.d/my.conf
     ports:
-      # 外部から接続したい場合はコメントを外す
+      # ホストから直接DBに接続したい場合はコメントを外す (例: 3306:3306)
       # - "3306:3306"
     networks:
       - app-network
 
-  # phpMyAdmin Service
+  #--------------------------------------------------------------------------
+  # phpMyAdmin (データベース管理ツール)
+  #--------------------------------------------------------------------------
   phpmyadmin:
+    # 公式のphpMyAdminイメージを使用
     image: phpmyadmin/phpmyadmin:latest
     container_name: ${COMPOSE_PROJECT_NAME}-phpmyadmin
     restart: always
+    # phpMyAdminが接続するDBサーバーの情報を環境変数で設定
     environment:
-      PMA_HOST: db
+      PMA_HOST: db # 'db'はMariaDBのサービス名
       MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
     ports:
       - "${PHPMYADMIN_PORT}:80"
@@ -82,12 +108,18 @@ services:
     networks:
       - app-network
 
-# Volumes for data persistence
+#--------------------------------------------------------------------------
+# ボリュームの定義
+#--------------------------------------------------------------------------
 volumes:
+  # データベース永続化用の名前付きボリューム
   db-data:
     driver: local
 
-# Networks for services communication
+#--------------------------------------------------------------------------
+# ネットワークの定義
+#--------------------------------------------------------------------------
 networks:
+  # サービス間通信用のブリッジネットワーク
   app-network:
     driver: bridge

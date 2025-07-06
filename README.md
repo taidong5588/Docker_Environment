@@ -18,22 +18,24 @@
 ## 📂 ディレクトリ構成
 
 .
-├── docker-compose.yml  # ← プロジェクトルートに配置
-├── .env                # ← プロジェクトルートに配置
-├── my-app/
-│   └── index.php
-└── docker-config/
-    ├── db/
-    │   ├── Dockerfile
-    │   └── my.conf
-    ├── errors/
-    │   └── php_errors.log
-    ├── nginx/
-    │   ├── Dockerfile
-    │   └── default.conf
-    └── php/
-        ├── Dockerfile
-        └── php.ini
+├── docker-config/               # コンテナ関連の設定をまとめるディレクトリ
+│   ├── db/                      # MariaDB コンテナ用設定
+│   │   ├── Dockerfile           # MariaDB イメージをカスタマイズ（オプション）
+│   │   └── my.conf              # MariaDB のカスタム設定
+│   ├── docker-compose.yml       # サービス全体の構成管理ファイル
+│   ├── .env                     # Docker環境変数の設定ファイル
+│   ├── .gitignore
+│   ├── errors
+│   │   └── php_errors.log
+│   ├── nginx/                   # Nginx 設定
+│   │   ├── default.conf         # 仮想ホストやリバースプロキシなどの定義
+│   │   └── Dockerfile           # Nginx コンテナのカスタマイズ（オプション）
+│   └── php/                     # PHP-FPM 設定
+│       ├── Dockerfile           # PHP-FPM のビルド定義（必要モジュールの追加など）
+│       └── php.ini              # PHP 設定ファイル
+├── my-app/                      # PHP アプリケーションのソース（Laravel など）
+│   └── index.php         
+└── README.md                    # セットアップ手順や注意事項の記載
 
 ---
 
@@ -42,12 +44,21 @@
 ```bash
 cd docker-config
 docker-compose up -d
-http://localhost：Nginx経由でアプリにアクセス
-http://localhost:8080：phpMyAdminでDB確認
+# コンテナを（再）ビルドしてバックグラウンドで起動の場合
+docker-compose up -d --build
+PHPアプリケーション: http://localhost:80
+phpMyAdmin: http://localhost:8080
+
+コンテナの停止: 環境を停止する際は、以下のコマンドを実行します。
+# コンテナを停止
+Bash
+docker-compose down
+データはdb-dataボリュームに残るので、再度　docker-compose up -d　で起動すればデータは復元されます。
+
 初期 DB接続情報：
 ホスト：db
 ユーザー：root
-パスワード：password
+パスワード：root_password_secret
 🛠 開発 Tips
 
 PHP エラー確認：
@@ -63,33 +74,6 @@ Mac 上では my-app/ 配下を自由に編集して即時反映できます
 
 ---
 
-この構成で、Laravel、CodeIgniter、Slim、独自PHPフレームワークなどにも柔軟に対応可能な、再利用性の高い開発環境が整います。
-
-次に `.env` テンプレートや、`Makefile` による起動補助なども [追加できます](f)。必要であればお知らせください。
 
 
-ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
-使い方 (How to Use)
-.envファイルの作成: プロジェクトルートに.envファイルを作成し、上記の内容を貼り付け、必要に応じて値を変更します。
 
-ファイルの配置: 上記の構成通りに、すべてのディレクトリとファイルを作成・配置します。
-
-コンテナの起動: プロジェクトのルートディレクトリ（docker-compose.ymlがある場所）でターミナルを開き、以下のコマンドを実行します。
-
-Bash
-
-# コンテナを（再）ビルドしてバックグラウンドで起動
-docker-compose up -d --build
-動作確認: ブラウザで以下のアドレスにアクセスします。（ポート番号は.envファイルの値です）
-
-PHPアプリケーション: http://localhost:8088
-
-phpMyAdmin: http://localhost:8089
-
-コンテナの停止: 環境を停止する際は、以下のコマンドを実行します。
-
-Bash
-
-# コンテナを停止
-docker-compose down
-データはdb-dataボリュームに残るので、再度docker-compose up -dで起動すればデータは復元されます。

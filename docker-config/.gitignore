@@ -1,30 +1,35 @@
-# Docker
-.docker/
+# .envファイルは認証情報を含むため、Git管理から除外
 .env
+
+# Docker関連
+.docker/
 docker-compose.override.yml
 
-# Logs and databases
-logs/
+# ログファイル
+errors/
 *.log
+
+# データベースファイル
 *.sql
 *.sqlite
 
-# PHP dependencies
-/vendor/
-composer.lock
+# PHPの依存パッケージ (Composer)
+# アプリケーションディレクトリ内のvendorを無視
+/my-app/vendor/
+/my-app/composer.lock
 
-# Node dependencies
-/node_modules/
-npm-debug.log
-yarn-error.log
-package-lock.json
-yarn.lock
+# Node.jsの依存パッケージ (npm, yarn)
+/my-app/node_modules/
+/my-app/npm-debug.log
+/my-app/yarn-error.log
+/my-app/package-lock.json
+/my-app/yarn.lock
 
-# IDE settings
+# IDEやエディタの設定ファイル
 .idea/
 .vscode/
 *.swp
 *.swo
 
-# macOS files
+# macOS固有のファイル
 .DS_Store

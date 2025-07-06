@@ -1,5 +1,10 @@
-# MariaDB公式の最新イメージをベースとして使用
-FROM mariadb:latest
+# docker-compose.ymlからビルド引数(ARG)としてバージョンを受け取る
+ARG MARIADB_VERSION=latest
+# 受け取ったバージョンを使ってベースイメージを指定
+FROM mariadb:${MARIADB_VERSION}
 
-# カスタム設定ファイル`my.conf`をコンテナ内の指定の場所にコピー
-COPY my.conf /etc/mysql/conf.d/my.conf
+# このDockerfileは、将来的なカスタマイズのために用意されています。
+# 例えば、コンテナ初回起動時に実行したいSQLファイルを配置できます。
+#
+# --- カスタマイズ例 ---
+# COPY ./init.sql /docker-entrypoint-initdb.d/
