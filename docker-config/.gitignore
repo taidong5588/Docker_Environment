@@ -1,0 +1,30 @@
+# Docker
+.docker/
+.env
+docker-compose.override.yml
+
+# Logs and databases
+logs/
+*.log
+*.sql
+*.sqlite
+
+# PHP dependencies
+/vendor/
+composer.lock
+
+# Node dependencies
+/node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# IDE settings
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS files
+.DS_Store
