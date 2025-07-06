@@ -53,6 +53,7 @@ services:
       DB_DATABASE: ${MARIADB_DATABASE}
       DB_USERNAME: ${MARIADB_USER}
       DB_PASSWORD: ${MARIADB_PASSWORD}
+      TZ: ${TZ}
     depends_on:
       - db
     networks:
