@@ -9,9 +9,9 @@
 | サービス     | 内容                           | ポート          |
 |--------------|--------------------------------|------------------|
 | PHP (8.2)    | PHP-FPM によるアプリ実行       | -                |
-| Nginx        | Webサーバ (静的 + PHP対応)     | `http://localhost:80` |
+| Nginx        | Webサーバ (静的 + PHP対応)     | `http://localhost:8080` |
 | MariaDB      | データベース                    | `3306`           |
-| phpMyAdmin   | DB GUI ツール                   | `http://localhost:8080` |
+| phpMyAdmin   | DB GUI ツール                   | `http://localhost:8081` |
 
 ---
 
