@@ -17,25 +17,27 @@
 
 ## 📂 ディレクトリ構成
 
-/
-├── .env                         # Docker環境変数の設定ファイル
-├── docker-compose.yml           # サービス全体の構成管理ファイル
-├── docker-config/               # コンテナ関連の設定をまとめるディレクトリ
-│   ├── db/                      # MariaDB コンテナ用設定
-│   │   ├── Dockerfile           # MariaDB イメージをカスタマイズ（オプション）
-│   │   └── my.conf              # MariaDB のカスタム設定
-│   ├── .gitignore
-│   ├── errors
-│   │   └── php_errors.log
-│   ├── nginx/                   # Nginx 設定
-│   │   ├── default.conf         # 仮想ホストやリバースプロキシなどの定義
-│   │   └── Dockerfile           # Nginx コンテナのカスタマイズ（オプション）
-│   └── php/                     # PHP-FPM 設定
-│       ├── Dockerfile           # PHP-FPM のビルド定義（必要モジュールの追加など）
-│       └── php.ini              # PHP 設定ファイル
-├── my-app/                      # PHP アプリケーションのソース（Laravel など）
-│   └── index.php         
-└── README.md                    # セットアップ手順や注意事項の記載
+project-root/
+├── .env                       # 環境変数定義ファイル
+├── docker-compose.yml        # Docker Compose によるサービス定義
+├── docker-config/            # 各サービスの構成フォルダ
+│   ├── db/                   # MariaDB 設定関連
+│   │   ├── Dockerfile        # MariaDB カスタムビルド（必要な場合）
+│   │   └── my.conf           # MariaDB 設定ファイル
+│   ├── nginx/                # Nginx 設定関連
+│   │   ├── Dockerfile        # Nginx カスタムビルド
+│   │   └── default.conf      # 仮想ホスト、リバースプロキシ設定
+│   ├── php/                  # PHP-FPM 設定関連
+│   │   ├── Dockerfile        # PHP カスタムイメージ
+│   │   └── php.ini           # PHP 設定ファイル
+│   ├── errors/               # エラーログ出力用フォルダ
+│   │   └── php_errors.log    # PHP エラーログファイル（空でOK）
+│   └── .gitignore            # Gitに含めないファイルの指定
+├── my-app/                   # PHP アプリケーション本体（Laravel等）
+│   └── public/
+│       └── index.php       　 # テスト用PHPファイル（初期）
+└── README.md                 # プロジェクト説明書
+
 
 ---
 
