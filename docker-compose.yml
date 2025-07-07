@@ -87,7 +87,7 @@ services:
 
     volumes:
       - db-data:/var/lib/mysql              # データ永続化用のボリューム
-      - ./docker-config/db/my.conf:/etc/mysql/conf.d/my.cnf  # MariaDB 設定
+      - ./docker-config/db/my.conf:/etc/mysql/conf.d/my.conf  # MariaDB 設定
 
     ports:
       - "3306:3306"                         # 任意でホストから直接接続できるようにする

@@ -72,11 +72,23 @@ Webサーバー: http://localhost:8080
 phpMyAdmin: http://localhost:8081
 → ユーザー名とパスワードは .env に記述した内容を使用します。
 
- コンテナの停止と削除
+4. コンテナの停止と削除
 Bash
 docker compose down
 
-コンテナ内でのコマンド実行
+5. コンテナの停止と削除
+
+Bash
+docker compose down
+コンテナとネットワークが停止し、削除されます。データベースのデータ (db_data ボリューム) は保持されます。
+
+コンテナ、ネットワーク、ボリュームすべてを削除するには:
+
+Bash
+docker compose down -v
+
+
+6. コンテナ内でのコマンド実行
 
 PHPコンテナ内でComposerコマンドなどを実行したい場合:
 
@@ -89,6 +101,7 @@ MariaDBコンテナに接続したい場合:
 Bash
 docker compose exec db bash # DBコンテナ内でbashシェルに入る
 mysql -u root -p # ルートユーザーでMariaDBにログイン
+
 
 💡 Laravel を導入したい場合
 bash
