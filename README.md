@@ -40,21 +40,18 @@ project-root/
 
 ---
 
-
----
-
 ## 🚀 セットアップ手順
 
+```dotenv
 ### 1. `.env` ファイルを作成
 
 必要な環境変数を記述します。以下を参考に `project-root/.env` を作成してください。
 
-```dotenv
 COMPOSE_PROJECT_NAME=myproject
 NGINX_PORT=8080
 PHPMYADMIN_PORT=8081
 MARIADB_VERSION=10.9
-MARIADB_ROOT_PASSWORD=rootpassword
+MARIADB_ROOT_PASSWORD=rootのpassword
 MARIADB_DATABASE=myapp_db
 MARIADB_USER=myuser
 MARIADB_PASSWORD=mypassword
