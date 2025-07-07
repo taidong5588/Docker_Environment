@@ -1,6 +1,6 @@
-# PHP 開発用 Docker 環境構築ガイド
+# 🐳 PHP + Nginx + MariaDB + phpMyAdmin 開発環境（Docker Compose）
 
-このリポジトリは、LaravelなどのPHPアプリに限らず、汎用的なPHP開発を想定した Docker ベースの開発環境を提供します。
+このリポジトリは、**Laravel 等の PHP アプリケーション開発環境**を Docker で構築するテンプレートです。PHP-FPM + Nginx + MariaDB + phpMyAdmin のスタックをシンプルにまとめています。
 
 ---
 
@@ -38,43 +38,79 @@ project-root/
 │       └── index.php       　 # テスト用PHPファイル（初期）
 └── README.md                 # プロジェクト説明書
 
+---
+
 
 ---
 
-## 🚀 起動方法（Mac）
+## 🚀 セットアップ手順
 
-```bash
-cd docker-config
-docker-compose up -d
-# コンテナを（再）ビルドしてバックグラウンドで起動の場合
-docker-compose up -d --build
-PHPアプリケーション: http://localhost:80
-phpMyAdmin: http://localhost:8080
+### 1. `.env` ファイルを作成
 
-コンテナの停止: 環境を停止する際は、以下のコマンドを実行します。
-# コンテナを停止
-Bash
-docker-compose down
-データはdb-dataボリュームに残るので、再度　docker-compose up -d　で起動すればデータは復元されます。
+必要な環境変数を記述します。以下を参考に `project-root/.env` を作成してください。
 
-初期 DB接続情報：
-ホスト：db
-ユーザー：root
-パスワード：root_password_secret
-🛠 開発 Tips
+```dotenv
+COMPOSE_PROJECT_NAME=myproject
+NGINX_PORT=8080
+PHPMYADMIN_PORT=8081
+MARIADB_VERSION=10.9
+MARIADB_ROOT_PASSWORD=rootpassword
+MARIADB_DATABASE=myapp_db
+MARIADB_USER=myuser
+MARIADB_PASSWORD=mypassword
+TZ=Asia/Tokyo
 
-PHP エラー確認：
-tail -f ../errors/php_errors.log
-Composer 実行：
-docker compose exec php composer install
-MariaDB 初期設定は docker-compose.yml の environment にて変更可能
-📝 補足
+2. Docker コンテナをビルド＆起動
+bash
+コードをコピーする
+# 初回ビルド & 起動
+docker-compose up --build -d
 
-Laravel を使う場合は my-app/public/ をドキュメントルートにしてください
-本番環境では環境変数やDB設定を .env に分離するのが推奨です
-Mac 上では my-app/ 配下を自由に編集して即時反映できます
+# サービスの状態確認
+docker-compose ps
+3. 動作確認
+Webサーバー: http://localhost:8080
+→ my-app/public/index.php が表示されれば成功です。
 
----
+phpMyAdmin: http://localhost:8081
+→ ユーザー名とパスワードは .env に記述した内容を使用します。
+
+💡 Laravel を導入したい場合
+bash
+コードをコピーする
+# アプリケーションディレクトリへ移動
+cd my-app
+
+# Laravel プロジェクトを作成
+docker exec -it myproject-php composer create-project laravel/laravel .
+
+# Laravel のキーを生成
+docker exec -it myproject-php php artisan key:generate
+
+# 権限調整（Linux の場合）
+sudo chown -R $USER:$USER my-app
+🧪 使用技術
+サービス	バージョン例
+PHP	8.2 (FPM)
+Nginx	最新（alpine）
+MariaDB	.envで指定
+phpMyAdmin	最新
+Composer	最新
+Laravel	任意で導入可能
+
+🛠 よくある用途
+Laravel / Slim / CakePHP などのローカル開発
+
+チームで統一された開発環境を構築
+
+phpMyAdmin によるデータベース管理
+
+📌 注意点
+本構成は 開発用途専用 です。本番環境にはセキュリティ強化が必要です。
+
+phpMyAdmin は本番では 使用しないでください。
+
+.env ファイルは Git管理しないように注意 してください。
 
 
 
