@@ -69,10 +69,13 @@ services:
   # ============================
   db:
     build:
-      context: ./docker-config/db
+      context: ./docker-config/db/conf
+      dockerfile: Dockerfile
+
       args:
         MARIADB_VERSION: ${MARIADB_VERSION}  # MariaDB のバージョン指定
-
+        
+    # image: mariadb:${MARIADB_VERSION}
     container_name: ${COMPOSE_PROJECT_NAME}-db
 
     restart: always                          # コンテナが落ちたら自動再起動
@@ -87,7 +90,9 @@ services:
 
     volumes:
       - db-data:/var/lib/mysql              # データ永続化用のボリューム
-      - ./docker-config/db/my.conf:/etc/mysql/conf.d/my.conf  # MariaDB 設定
+      - ./docker-config/db/conf/my.conf:/etc/mysql/conf.d/my.conf  # MariaDB 設定
+      - ./docker-config/db/init:/docker-entrypoint-initdb.d   # ✅ テーブル作成・初期データ投入用SQL
+
 
     ports:
       - "3306:3306"                         # 任意でホストから直接接続できるようにする
