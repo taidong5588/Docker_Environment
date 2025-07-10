@@ -139,3 +139,17 @@ phpMyAdmin によるデータベース管理
 phpMyAdmin は本番では 使用しないでください。
 
 .env ファイルは Git管理しないように注意 してください。
+
+🔍 サービス名が不明なときの確認方法
+
+以下を実行すると、サービス一覧が表示されます：
+
+docker compose ps
+出力例：
+
+NAME                COMMAND                  SERVICE             STATUS
+my-php-app          "docker-php-entrypoi…"   app                 running
+my-db               "docker-entrypoint.s…"   db                  running
+この場合、app がサービス名なので docker compose exec app php -v を使います。
+
+
